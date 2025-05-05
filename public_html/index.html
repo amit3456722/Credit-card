@@ -1,0 +1,1769 @@
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16825832226"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-16825832226');
+</script>
+
+
+
+
+
+
+
+<script>
+    $(document).ready(function() {
+        var modalShown = false;
+
+        // Set a delay time (e.g., 3000 milliseconds = 3 seconds)
+        var delayTime = 1000;
+
+        // Use setTimeout to delay the modal display after the page loads
+        setTimeout(function() {
+            if (!modalShown) {
+                $('#exampleModalLong').modal('show');
+                modalShown = true; // Set flag to true to indicate modal has been shown
+            }
+        }, delayTime);
+
+        // If you want the modal to hide when scrolling back up before it's shown
+        $(window).scroll(function() {
+            var scrollDistance = $(window).scrollTop();
+            var scrollTrigger = 1200;
+
+            if (scrollDistance < scrollTrigger && modalShown) {
+                $('#exampleModalLong').modal('hide');
+                modalShown = false; // Reset flag when scroll distance is less than trigger point
+            }
+        });
+    });
+</script>
+
+<script>
+    $("#exampleModalLong").modal({
+        backdrop: "static",
+        keyboard: false,
+    });
+
+    $("#banner-btn").click(function() {
+        $("#exampleModalLong").modal('hide');
+    });
+</script>
+
+
+
+
+
+
+
+
+<script>
+// Function to fetch District and State based on Pincode
+function getDistrictAndState(pincode) {
+    // Check if the pincode is a valid 6-digit number
+    if (pincode.length === 6 && !isNaN(pincode)) { 
+        fetch(`https://api.postalpincode.in/pincode/${pincode}`)
+            .then(response => response.json()) // Parse the JSON response
+            .then(data => {
+                if (data[0].Status === "Success") {
+                    // Successfully found data, extract and display district and state
+                    const district = data[0].PostOffice[0].District;
+                    const state = data[0].PostOffice[0].State;
+                    document.getElementById('txtdistrict').value = district;
+                    document.getElementById('txtstate').value = state;
+                } else {
+                    // Handle the case where the pincode is not found or invalid
+                    document.getElementById('txtdistrict').value = 'Not found';
+                    document.getElementById('txtstate').value = 'Not found';
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+                document.getElementById('txtdistrict').value = 'Error';
+                document.getElementById('txtstate').value = 'Error';
+            });
+    } else {
+        // Reset fields if the pincode is not 6 digits or invalid
+        document.getElementById('txtdistrict').value = '';
+        document.getElementById('txtstate').value = '';
+    }
+}
+</script>
+
+
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    // Select elements for loan amount, loan tenure, EMI, and interest rate
+    const loanAmountInput = document.getElementById('txtloan_amount');
+    const loanTenureInput = document.getElementById('txtloan_tanure');
+    const emiInput = document.getElementById('txtloan_emi');
+    const interestRateInput = document.getElementById('txtloan_intrest'); // This will show Total Interest
+
+    // Interest rate (fixed at 8%)
+    const interestRate = 5.99 / 100;  // Convert percentage to decimal
+
+    // Function to calculate EMI and Total Interest
+    function calculateEMI() {
+        const loanAmount = parseFloat(loanAmountInput.value);
+        const loanTenure = parseInt(loanTenureInput.value);
+
+        if (loanAmount && loanTenure) {
+            const rateOfInterest = interestRate / 12;  // Monthly interest rate
+            const tenureInMonths = loanTenure;  // Loan tenure in months
+
+            // EMI formula: EMI = P * r * (1 + r)^n / ((1 + r)^n - 1)
+            // Where:
+            // P = loan amount
+            // r = monthly interest rate
+            // n = number of months
+
+            const emi = (loanAmount * rateOfInterest * Math.pow(1 + rateOfInterest, tenureInMonths)) / (Math.pow(1 + rateOfInterest, tenureInMonths) - 1);
+            const totalInterest = (emi * tenureInMonths) - loanAmount;  // Total interest
+
+            // Update the EMI input field
+            emiInput.value = emi.toFixed(2);  // Round to 2 decimal places
+
+            // Update the Total Interest field with the total interest calculated
+            interestRateInput.value = totalInterest.toFixed(2);  // Total interest
+        }
+    }
+
+    // Add event listeners to inputs
+    loanAmountInput.addEventListener('input', calculateEMI);
+    loanTenureInput.addEventListener('change', calculateEMI);
+});
+
+
+</script>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ifscInput = document.getElementById('txtbank_ifsc');
+    const bankNameInput = document.getElementById('txtbank_name');
+    const bankAddressInput = document.getElementById('txtbank_address');
+
+    // Function to call the IFSC API
+    function fetchBankDetails(ifscCode) {
+        const url = `https://ifsc.razorpay.com/${ifscCode}`; // Example API URL
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.BANK) {
+                    bankNameInput.value = data.BANK;
+                    bankAddressInput.value = data.ADDRESS || 'Address not available';
+                } else {
+                    bankNameInput.value = '';
+                    bankAddressInput.value = '';
+                    alert('Bank details not found for this IFSC Code.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching bank details:', error);
+                alert('Failed to fetch bank details.');
+            });
+    }
+
+    // Event listener for IFSC Code input
+    ifscInput.addEventListener('input', function() {
+        const ifscCode = ifscInput.value.trim();
+
+        if (ifscCode.length === 11) { // IFSC code is 11 characters long
+            fetchBankDetails(ifscCode);
+        } else {
+            bankNameInput.value = '';
+            bankAddressInput.value = '';
+        }
+    });
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+    <script src="https://aadharcredit.com/website/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+   
+    <script>
+        $('.self').owlCarousel({
+            loop: true,
+            margin: 28, // Adjust margin here, no need for px
+            autoplay: true,
+            autoplayTimeout: 4000,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 1
+                },
+                1000: {
+                    items: 4 // Ensure 4 items for wider screens
+                }
+            }
+        });
+        $('.review-carousel').owlCarousel({
+            loop: true,
+            margin: 28, // Adjust margin here, no need for px
+            autoplay: true,
+            autoplayTimeout: 4000,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 1
+                },
+                1000: {
+                    items: 3 // Ensure 4 items for wider screens
+                }
+            }
+        });
+        $('.authorize-carousel').owlCarousel({
+            loop: true,
+            margin: 28, // Adjust margin here, no need for px
+            autoplay: true,
+            autoplayTimeout: 4000,
+            responsive: {
+                0: {
+                    items: 2
+                },
+                600: {
+                    items: 2
+                },
+                1000: {
+                    items: 7 // Ensure 4 items for wider screens
+                }
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById("exampleModalCenter");
+            var videoFrame = document.getElementById("videoFrame");
+
+            // On item click, open modal with the video
+            document.querySelectorAll('.item').forEach(function(item) {
+                item.addEventListener('click', function() {
+                    var videoSrc = this.querySelector('.video-popup').getAttribute('data-video');
+                    videoFrame.src = videoSrc;
+                });
+            });
+        });
+    </script>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Aadhar Credit | Financial Services</title>
+    <link rel="icon" href="https://aadharcredit.com/website/Images/favicon.png" type="image/png" sizes="16x16" />
+    <meta name="description"
+        content="Apply for Instant Loans Online up to Rs 25 Lakh  At Low Interest Rates - Flexible Tenure - Minimal Paperwork - 100% Paperless Process" />
+    <meta name="keywords"
+        content="personal loan apply, online loan apply, instant personal loan apply, loan apply" />
+
+    
+    <link href="https://aadharcredit.com/website/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://aadharcredit.com/website/css/style.css" type="text/css" rel="stylesheet" />
+    <link href="https://aadharcredit.com/website/css/responsive.css" rel="stylesheet" type="text/css" />
+    <link href="https://aadharcredit.com/website/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
+    <link href="https://aadharcredit.com/website/css/animate.css" rel="stylesheet" media="all" type="text/css">
+
+    <link rel="stylesheet" href="https://aadharcredit.com/website/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://aadharcredit.com/website/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
+    <link href='https://aadharcredit.com/website/boxicons%402.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+
+    
+    
+    
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16914304613">
+</script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-16914304613');
+</script>
+
+
+    <link href="https://aadharcredit.com/website/css/newstyle.css" rel="stylesheet" media="all" type="text/css">
+
+</head>
+
+<body>
+    
+    <style> 
+            /*  .fixedHeader {
+            padding: 0;
+            position: fixed;
+            top: 0;
+            transition: all 0.1s;
+            -webkit-transition: all 2s;
+            display: block;
+            
+            .head {
+                position: fixed;
+                width: 100%;
+            }*/
+
+@media screen and (max-width: 991px) {
+    .navbar-header img {
+        width: 131px;
+        margin-top: 5px;
+    }
+}
+        .languageCovert .gt_switcher .gt_selected a:after {
+            background: none;
+            right: 10px !important;
+            content: "\f107" !important;
+            font-family: 'FontAwesome';
+            color: #fff;
+        }
+
+        .modal {
+            z-index: 99999 !important;
+        }
+
+        .close:hover {
+            opacity: 1 !important;
+        }
+
+        @media (max-width:768px) {
+            header {
+                margin: 0px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .modal-sm {
+                width: 420px !important;
+            }
+        }
+
+        /*.offer-popup {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        }*/
+
+        .offer-popup .close {
+            opacity: 1;
+            position: relative;
+        }
+
+        .offer-popup .close span {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background: #12373b;
+            border-radius: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            color: #fff;
+            left: -27px;
+            top: -10px;
+            z-index: 1;
+        }
+
+        .offer-popup .contact {
+            position: absolute;
+            bottom: 28px;
+            font-size: 16px;
+            font-family: 'Roboto';
+            font-weight: 500;
+            line-height: 33px;
+            display: flex;
+            left: 18px;
+        }
+
+        .offer-popup .contact a {
+            text-decoration: none;
+            color: #4b4949;
+        }
+
+        .offer-whatsapp-icon {
+            position: relative;
+            left: 6px;
+        }
+
+        .offer-whatsapp-icon img {
+            width: 30px;
+        }
+
+        .offer-popup .book-btn {
+            position: absolute;
+            bottom: 112px;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 75%;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+            font-family: 'poppins';
+            color: #fff;
+            background: #70b54d;
+            padding: 7px 20px;
+            border-radius: 17px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        @media screen and (max-width: 576px) {
+            .offer-popup {
+                padding: 12px;
+            }
+
+            .offer-popup .contact {
+                font-size: 14px;
+                bottom: 28px;
+            }
+
+            .offer-popup .book-btn {
+                bottom: 98px;
+                left: 45px;
+                font-size: 19px;
+                font-weight: 600;
+                padding: 7px 27px;
+            }
+
+            /*.offer-popup .contact {
+                bottom: 55px;
+                font-size: 14px;
+                left: 51px;
+                line-height: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+        .offer-whatsapp-icon {
+            left: 0;
+        }
+
+        .modal-dialog {
+            margin: auto;
+        }
+
+        .modal-header .close {
+            background-color: #ffffff00;
+            font-size: 30px;
+            color: #ffffff;
+            height: 25px;
+            margin-bottom: 0px;
+        }
+
+        .popup-call {
+            padding: 9px 14px;
+            background: #38888f;
+            color: #fff !important;
+            border-radius: 10px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+            .popup-call span {
+                display: none;
+            }*/
+        }
+
+        /*.modal-dialog {
+        transform: translateY(-50%);
+        max-width: 80%;*/
+        /* Adjust the maximum width as needed */
+        /*height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }*/
+        .modal-dialog {
+            max-width: 500px;
+            /* margin: 1.75rem 1rem; */
+        }
+
+        .modal-header {
+            padding: 15px;
+            border-bottom: 1px solid #112b3d !important;
+            background: linear-gradient(to top, #059a87, #083342);
+            color: #fff;
+            border-radius: 0px 0px 50px 50px;
+            box-shadow: 0 4px 3px 1px rgb(0 0 0 / 20%);
+            padding: 10px 35px 10px 45px !important;
+        }
+        .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+            background-color: #e2e4e5;
+            opacity: 1;
+        }
+        @media only screen and (max-width: 768px) {
+    .sidebar {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        background-color: #083342;
+        overflow-x: hidden;
+        transition: .5s;
+        padding-top: 55px;
+    }
+}
+
+        /* .modal-dialog .book-now {
+        position: absolute;
+        width: 100%;
+        bottom: 111px;
+        background: #70b54d;
+        left: 54px;
+        color: #fff;
+        font-family: 'poppins', sans-serif;
+        font-size: 19px;
+        text-align: center;
+        font-weight: 600;
+        width: auto;
+        padding: 8px 40px;
+        border-radius: 50px;
+    }*/
+
+        .top-header {
+            background: linear-gradient(45deg, #46aba6, #1d5454, #53c3bf);
+            width: 100%;
+        }
+
+        .top-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-header .container a {
+            font-family: math;
+            font-weight: 700;
+        }
+
+        #navbar .mega-dropdown {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gt_container--hich1m .gt_switcher .gt_option {
+            height: 70px;
+            position: absolute;
+            width: 129px;
+        }
+
+        @media screen and (max-width: 576px) {
+            .offer-popup {
+                padding: 12px !important;
+            }
+
+            footer {
+                padding: 34px 0px 34px !important;
+            }
+        }
+        .testimonial .item {
+                height: auto !important;
+        }
+    </style>
+
+    
+    <!-- Modal -->
+    
+
+    <header class="headerWrap">
+       
+        <div class="lower-head">
+            <div class="container custom-container">
+                <nav class="navbar navbar-default"
+                    style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                    <div class="navbar-header">
+                        <!--<button type="button" class="openbtn pull-right">☰</button>-->
+                        <a class="navbar-brand" href="/"><img src="https://aadharcredit.com/website/Images/logo.webp"
+                                class="img-responsive" alt="logo"></a>
+
+                        <a data-target="#mySidebar" onclick="toggleNav()" class="hidden-lg">
+                            <i class='bx bx-menu-alt-right' style="font-size: 35px;"></i>
+                        </a>
+
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav  navbar-right">
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/apply.html">Apply Now</a></li>
+                            <li><a href="/about-us.html">About Us</a></li>
+                            <li><a href="/contact-us.html">Contact</a></li>
+                            <li><a href="#">+91-9229062534</a></li>
+                           
+
+                            <!-------------Mega Menu--------------->
+                           
+                        </ul>
+                    </div><!--/.container-fluid -->
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!------------mobile menu---------------->
+    <div id="mySidebar" class="sidebar hidden-md hidden-lg hidden-sm show-xs">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/"><span class="fa fa-home"></span> &nbsp;Home</a></li>
+            s
+            <li><a href="/about-us.html"><span class="fa fa-info-circle"></span> &nbsp;About Us</a></li>
+            <li><a href="/contact-us.html"> <span class="fa fa-phone"></span> &nbsp;Contact</a></li>
+            
+           
+            <!-------------Mega Menu--------------->
+           
+        </ul>
+
+    </div>
+    <!---end-->
+
+    
+
+
+    <!-- Main Banner -->
+    <section class="main-banner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="https://aadharcredit.com/website/Images/main-banner.png" alt="" class="main-banner-img banner-content" style="margin: 50px;">
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="banner-content"  style="margin: 50px 0;">
+                        <span>Welcome To Aadhar Credit</span>
+                        <h1>Get Personal Loan of up to ₹25 Lakhs</h1>
+                       
+                        <div class="modal-body" style="box-shadow: 0 5px 15px rgba(0, 0, 0, .5); background:#fff; border-radius:10px;">
+                            
+                            <form action="https://api.web3forms.com/submit" method="POST">
+    <input type="hidden" name="access_key" value="d8695f83-f6a8-42d7-ae06-c1528861c220">    <!-- Step 1 -->
+    <div class="form-step active" id="step-1">
+        <!--<h4>Step 1: Personal Information</h4>-->
+        <div class="form-group">
+            <label class="control-label" for="txtname">Full Name</label>
+            <input type="text" name="name" class="form-control" id="txtname" placeholder="Enter your Full Name" required />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="txtemail">Email</label>
+            <input type="email" name="email" class="form-control" id="txtemail" placeholder="Enter Your Email" required />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="txtphone">Mobile Number</label>
+            <input type="number" name="mobile" class="form-control" id="txtphone" placeholder="Enter Your 10-Digit Mobile Number" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" />
+        </div>
+        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+        <!----
+        <button type="button" class="btn btn-success text-center" onclick="nextStep(2)">Apply Now</button>
+    -->
+        <button type="submit">Submit Form</button>
+    </div>
+
+    <!-- Step 2 
+    <div class="form-step" id="step-2">
+        <h4>Step 2: Address and Identification</h4>
+        <div class="form-group">
+            <label class="control-label" for="txtaadhar">Aadhar Number</label>
+            <input type="number" name="aadhar" class="form-control" id="txtaadhar" placeholder="Enter Your 12-Digit Aadhaar Number" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 12);" />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="txtpancard">PAN Card Number</label>
+            <input type="text" name="pancard" class="form-control" id="txtpancard" placeholder="Enter Your PAN Card Number" required oninput="this.value = this.value.toUpperCase();" minlength="10" maxlength="10" pattern="[A-Z]{5}[0-9]{4}[A-Z]" />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="txtphone">WhatsApp Number</label>
+            <input type="number" name="message" class="form-control" id="txtphone" placeholder="Enter Your 10-Digit WhatsApp Number" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="txtpincode">Pincode</label>
+            <input type="number" name="pincode" class="form-control" id="txtpincode" placeholder="Enter 6-Digit Pincode" required oninput="getDistrictAndState(this.value)" />
+        </div>
+    
+        <div class="form-group">
+            <label class="control-label" for="txtdistrict">District</label>
+            <input type="text" name="district" class="form-control" id="txtdistrict" placeholder="District" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="txtstate">State</label>
+            <input type="text" name="state" class="form-control" id="txtstate" placeholder="State" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="txtaddress">Address</label>
+            <input type="text" name="address" class="form-control" id="txtaddress" placeholder="Address" required />
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="previousStep(1)" style="border-radius: 8px; margin-top: 5px;">Previous</button>
+        <button type="button" class="btn btn-success" onclick="nextStep(3)" style=" width: auto; padding: 6px 40px; ">Next</button>
+    </div>
+
+    <-- Step 3  
+
+
+    <div class="form-step" id="step-3">
+        <h4>Step 3: Loan Details</h4>
+        <div class="form-group">
+            <label class="control-label" for="txtloan_amount">Loan Amount</label>
+            <input type="number" name="loan_amount" class="form-control" id="txtloan_amount" placeholder="Enter loan amount (min. ₹50,000)" required min="50000" />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="txtloan_type">Loan Type</label>
+            <select name="loan_type" class="form-control" id="txtloan_type" required>
+                <option value="" disabled selected>Select Loan Type</option>
+                <option value="Personal Loan">Personal Loan</option>
+                <option value="Emergency Loan">Emergency Loan</option>
+                <option value="Business Loan">Business Loan</option>
+                <option value="Home Loan">Home Loan</option>
+                <option value="Education Loan">Education Loan</option>
+                <option value="Gold Loan">Gold Loan</option>
+                <option value="Medical Loan">Medical Loan</option>
+                <option value="Travel Loan">Travel Loan</option>
+                <option value="Wedding Loan">Wedding Loan</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="txtloan_tanure">Loan Tenure</label>
+            <select name="loan_tanure" class="form-control" id="txtloan_tanure" required>
+                <option value="" disabled selected>Select Loan Tenure</option>
+                <option value="12">12 Months</option>
+                <option value="24">24 Months</option>
+                <option value="36">36 Months</option>
+                <option value="48">48 Months</option>
+                <option value="60">60 Months</option>
+                <option value="72">72 Months</option>
+                <option value="84">84 Months</option>
+                <option value="96">96 Months</option>
+                <option value="108">108 Months</option>
+                <option value="120">120 Months</option>
+            </select>
+        </div>
+        <div class="form-group">    
+            <label class="control-label" for="inputPassword3">EMI</label>
+            <input type="number" name="loan_emi" class="form-control" id="txtloan_emi" placeholder="EMI" readonly />
+        </div> 
+        <div class="form-group">       
+            <label class="control-label" for="inputPassword3">Intrest Rate 5.99%</label>
+            <input type="number" name="loan_intrest" class="form-control" id="txtloan_intrest" placeholder="Loan Intrest" readonly />
+        </div>
+
+        
+        
+        <button type="button" class="btn btn-secondary" onclick="previousStep(2)" style="border-radius: 8px; margin-top: 5px;">Previous</button>
+        <button type="button" class="btn btn-success" onclick="nextStep(4)" style=" width: auto; padding: 6px 40px;">Next</button>
+    </div>
+
+    <-- Step 4 
+    <div class="form-step" id="step-4">
+        <h4>Step 4: Bank Details</h4>
+        <div class="form-group">
+            <label class="control-label" for="txtbank_holder">Bank Holder Name</label>
+            <input type="text" name="bank_holder" class="form-control" id="txtbank_holder" 
+            placeholder="Bank Holder Name" required />
+        </div>
+        
+        <div class="form-group">         
+            <label class="control-label" for="inputPassword3">IFSC Code</label>
+            <input type="text" name="bank_ifsc" class="form-control" id="txtbank_ifsc"
+                                placeholder="IFSC Code"   oninput="this.value = this.value.toUpperCase();"required />
+        </div>
+                        
+        <div class="form-group">        
+            <label class="control-label" for="inputPassword3">Bank Name</label>
+            <input type="text" name="bank_name" class="form-control" id="txtbank_name"
+                                placeholder="Bank Name" readonly/>
+        </div>
+                        
+        <div class="form-group">        
+            <label class="control-label" for="inputPassword3">Bank Address</label>
+            <input type="text" name="bank_address" class="form-control" id="txtbank_address"
+                                placeholder="Bank Address" readonly/>
+        </div>
+                        
+        <div class="form-group">       
+            <label class="control-label" for="inputPassword3">Bank Account Number</label>
+            <input type="number" name="bank_number" class="form-control" id="txtbank_number"
+                                placeholder="Bank Account Number" required />
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="previousStep(3)" style="border-radius: 8px; margin-top: 5px;">Previous</button>
+        <button type="submit" class="btn btn-success">Submit Now</button>
+    </div>
+-->
+</form>
+
+
+<script>
+    <script>
+        // Save form data to sessionStorage
+        function saveStepData(step) {
+            const formData = new FormData(document.getElementById('multiStepForm'));
+            formData.forEach((value, key) => {
+                sessionStorage.setItem(key, value);
+            });
+        }
+
+        // Load form data from sessionStorage
+        function loadStepData(step) {
+            const formData = new FormData(document.getElementById('multiStepForm'));
+            formData.forEach((value, key) => {
+                const input = document.querySelector(`[name="${key}"]`);
+                if (input) {
+                    input.value = sessionStorage.getItem(key);
+                }
+            });
+        }
+
+        // Navigate to the next step
+        function nextStep(step) {
+            saveStepData(step);
+            document.getElementById('step-' + step).classList.remove('active');
+            document.getElementById('step-' + (step + 1)).classList.add('active');
+        }
+
+        // Navigate to the previous step
+        function previousStep(step) {
+            document.getElementById('step-' + step).classList.remove('active');
+            document.getElementById('step-' + (step - 1)).classList.add('active');
+        }
+
+        // Calculate EMI
+        function calculateEMI() {
+            const loanAmount = parseFloat(document.getElementById('txtloan_amount').value);
+            const loanTenure = parseInt(document.getElementById('txtloan_tanure').value);
+            if (loanAmount && loanTenure) {
+                const interestRate = 10;  // Assume a static interest rate for simplicity
+                const interest = (loanAmount * interestRate * loanTenure) / 100;
+                const totalLoanAmount = loanAmount + interest;
+                const emi = totalLoanAmount / loanTenure;
+
+                document.getElementById('txtloan_emi').value = emi.toFixed(2);
+            }
+        }
+
+        // On page load, load saved data
+        document.addEventListener('DOMContentLoaded', function () {
+            loadStepData(1);
+            loadStepData(2);
+            loadStepData(3);
+            loadStepData(4);
+        });
+    </script>
+</script>
+
+<script>
+    function validateStep(step) {
+        const currentStep = document.getElementById(`step-${step}`);
+        let isValid = true;
+
+        // Find all required inputs in the current step
+        currentStep.querySelectorAll('input[required], select[required]').forEach((input) => {
+            if (!input.value.trim()) {
+                // Highlight the invalid field
+                input.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                // Remove invalid class if the field is valid
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        return isValid;
+    }
+
+    function nextStep(step) {
+        const previousStep = step - 1;
+
+        // Validate the current step before proceeding
+        if (!validateStep(previousStep)) {
+            alert("Please fill in all required fields before proceeding.");
+            return;
+        }
+
+        // Move to the next step if validation passes
+        document.querySelectorAll('.form-step').forEach((step) => step.classList.remove('active'));
+        document.getElementById(`step-${step}`).classList.add('active');
+    }
+
+    function previousStep(step) {
+        document.querySelectorAll('.form-step').forEach((step) => step.classList.remove('active'));
+        document.getElementById(`step-${step}`).classList.add('active');
+    }
+</script>
+
+
+<style>
+    .form-step { display: none; }
+    .form-step.active { display: block; }
+    .is-invalid { border: 2px solid red; }
+</style
+
+
+                    </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    </section>
+
+
+  
+ 
+    <section class="py-16 help-you text-white" style="padding: 20px 0;">
+        <div class="container">
+            <div class="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-2 gap-4">
+                <div class="w-full text-center col-md-3 col-xs-6">
+                    <h1 class=" font-bold">120K</h1>
+                    <h4 class="text-lg font-light" style="font-size: 16px;">Loans Taken</h4>
+                </div>
+                <div class="w-full text-center col-md-3 col-xs-6">
+                    <h1 class=" font-bold">7+</h1>
+                    <h4 class="text-lg font-light" style="font-size: 16px;">Experience</h4>
+                </div>
+                <div class="w-full text-center col-md-3 col-xs-6">
+                    <h1 class=" font-bold">75+</h1>
+                    <h4 class="text-lg font-light" style="font-size: 16px;">Business Partner</h4>
+                </div>
+                <div class="w-full text-center col-md-3 col-xs-6">
+                    <h1 class=" font-bold">100%</h1>
+                    <h4 class="text-lg font-light" style="font-size: 16px;">Happy Clients</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About Section -->
+    <section class="about-umrah">
+        <div class="container">
+            <div class="about">
+                <div class="row">
+                    <div class="col-md-6" style="position: relative;text-align: center;">
+                        <img src="https://aadharcredit.com/website/Images/about.png" alt="" width="70%" class="about-img" style=" box-shadow: none; ">
+                        <img src="https://aadharcredit.com/website/Images/umrah-package/bg.png" alt="" class="bg-img">
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="heading">You can apply</h3>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-check" aria-hidden="true" style="margin-right: 5px;"></i>If you are an Indian citizen above 18 years of age</li>
+                            <li><i class="fa fa-check" aria-hidden="true" style="margin-right: 5px;"></i>If you have a valid current address proof</li>
+                            <li><i class="fa fa-check" aria-hidden="true" style="margin-right: 5px;"></i>If you have a bank account with internet banking facility</li>
+                            <li><i class="fa fa-check" aria-hidden="true" style="margin-right: 5px;"></i>Annual Percentage Rate offered to the customer during the period of 02nd Oct 2022 To 31st Mar 2023</li>
+                            <li><i class="fa fa-check" aria-hidden="true" style="margin-right: 5px;"></i>Min APR - 5.99%. Max APR - 11%. Repayment schedule: Min - 12 months & Max - 240 Months.^T&C apply</li>
+                            <li><i class="fa fa-check" aria-hidden="true" style="margin-right: 5px;"></i>Example: On a personal loan of Rs. 1 lakh at rate of 8% per annum, for a tenure of 24 months, the EMI amount will be Rs.4,523</li>
+                            <li><i class="fa fa-check" aria-hidden="true" style="margin-right: 5px;"></i>List of documents required for loan approval <a href="/documentation"><b>Check List</b></a></li>
+                        </ul>
+                        
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About Section End-->
+
+    <section class="help-you" style="position: relative;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="content-box">
+                        <h3 class="heading">Here’s What you get from us</h3>
+                        <p>Our seasoned professionals and up-to-date working practices ensure fast-processed 
+                        services that effectively help you achieve your goals. We assist you through.</p>
+
+                        <div class="row">
+                            <div class="col-md-6 col-xs-6">
+                                <h4 style="font-size:16px">Profile Analysis</h4>
+                                <h6 style="font-size:16px">Thorough inspection of Financial profile to understand client needs</h6>
+                            </div>
+                            <div class="col-md-6 col-xs-6">
+                                <h4 style="font-size:16px">Loan Approval</h4>
+                                <h6 style="font-size:16px">Our partnership with reputed banks offers a greater chance of approval.</h6>
+                            </div>
+                            <div class="col-md-6 col-xs-6">
+                                <h4 style="font-size:16px">Hassle-Free Processing</h4>
+                                <h6 style="font-size:16px">Rest assured with our Streamlined and reliable processing methods</h6>
+                            </div>
+                            <div class="col-md-6 col-xs-6">
+                                <h4 style="font-size:16px">Expert Guidance</h4>
+                                <h6 style="font-size:16px">Transparent and Best financial advice to match your needs</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <img src="https://aadharcredit.com/website/Images/umrah-package/loan-approved.png" alt="" class="help-img">
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Why choose us Section -->
+    <section class="why-choose-us">
+        <div class="container">
+            <h3 class="heading">Your Gateway To Strategic Business Loans</h3>
+
+            <div class="row">
+                <div class="col-md-4 col-xs-6 no-padding-xs">
+                    <div class="card" style="border: 1px solid #fb6f92;">
+                        <div class="icon">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1102/1102686.png" alt="">
+                        </div>
+                        <h4></h4>
+                        <a href=“aadharcreditcard.rf.gd/apply.html”><h4>Personal Loan</h4></a>
+                        <p>
+                            A personal loan is an amount of money you can borrow to use for a variety of purposes.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-6 no-padding-xs">
+                    <div class="card">
+                        <div class="icon">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2417/2417668.png" alt="">
+                        </div>
+                        <a href=“aadharcreditcard.rf.gd/apply.html”><h4>Home Loan</h4></a>
+                        <h4></h4>
+                        <p>
+                            Loan advanced to a person to assist in buying a house or flat.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-xs-6 no-padding-xs">
+                    <div class="card" style="border: 1px solid #fb6f92;">
+                        <div class="icon">
+                            <img src="https://cdn-icons-png.flaticon.com/512/639/639394.png" alt="">
+                        </div>
+                        
+                        <a href=“aadharcreditcard.rf.gd/apply.html”><h4>Business loan</h4></a>
+                        <p> A business loan is a financial arrangement that provides businesses with funds to meet their financial needs. </p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-6 no-padding-xs">
+                    <div class="card">
+                        <div class="icon">
+                            <img src="https://cdn-icons-png.flaticon.com/512/10799/10799112.png" alt="">
+                        </div>
+                       
+                        <a href=“aadharcreditcard.rf.gd/apply.html”><h4>Education Loan</h4></a>
+                        <p>
+                            An education loan is a sum of money borrowed to pay for higher education
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-xs-6 no-padding-xs">
+                    <div class="card" style="border: 1px solid #fb6f92;">
+                        <div class="icon">
+                            <img src="https://cdn-icons-png.flaticon.com/512/12885/12885326.png" alt="">
+                        </div>
+                        
+                        <a href=“aadharcreditcard.rf.gd/apply.html”><h4>Secured loans</h4></a>
+                        <p>
+                            Secured loans are business or personal loans that require some type of collateral as a condition of borrowing.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-xs-6 no-padding-xs">
+                    <div class="card">
+                        <div class="icon">
+                            <img src="https://cdn-icons-png.flaticon.com/512/9699/9699813.png" alt="">
+                        </div>
+                        
+                        <a href=“aadharcreditcard.rf.gd/apply.html”><h4>Loan Against Property</h4></a>
+                        <p>
+                            Home renovations, Business expansions, Investments, Debt consolidation, Education expenses, and Medical emergencies.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why choose us Section End-->
+    
+    
+    <!-- apply for Loan Section -->
+    <section class="why-choose-us">
+        <div class="container">
+            <h3 class="heading">How to apply for Loan</h3>
+
+            <div class="row">
+                <div class="col-md-3 col-xs-6 no-padding-xs">
+                    <div class="card">
+                        <div class="icon">
+                            <img src="https://aadharcredit.com/website/Images/loan1.svg" alt="">
+                        </div>
+                        <h4>Step : 1</h4>
+                        <p style=" display: contents; ">
+                            Select Loan Type
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-xs-6 no-padding-xs">
+                    <div class="card">
+                        <div class="icon">
+                            <img src="https://aadharcredit.com/website/Images/loan2.svg" alt="">
+                        </div>
+                        <h4>Step : 2</h4>
+                        <p style=" display: contents; ">
+                            Fill Basic Details
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-xs-6 no-padding-xs">
+                    <div class="card">
+                        <div class="icon">
+                            <img src="https://aadharcredit.com/website/Images/loan3.svg" alt="">
+                        </div>
+                        <h4>Step : 3</h4>
+                        <p style=" display: contents; ">
+                            We'll get to you within 1 hour
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-xs-6 no-padding-xs">
+                    <div class="card">
+                        <div class="icon">
+                            <img src="https://aadharcredit.com/website/Images/loan4.svg" alt="">
+                        </div>
+                        <h4>Step : 4</h4>
+                        <p style=" display: contents; ">
+                            Loan Approval
+                        </p>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+    </section>
+    <!-- End apply for Loan Section -->
+    
+    <!-- Features Section -->
+    <section class="why-choose-us">
+        <div class="container">
+            <h3 class="heading">Features of Aadhar Credit</h3>
+
+            <div class="row">
+                <div class="col-md-3 col-xs-6 no-padding-xs">
+                    <div class="card" style="border: 1px solid #fb6f92;">
+                        <div class="icon">
+                            <img src="https://aadharcredit.com/website/Images/features1.svg" alt="">
+                        </div>
+                        <h4>Minimum Documentation</h4>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-6 no-padding-xs">
+                    <div class="card" style="border: 1px solid #fb6f92;">
+                        <div class="icon">
+                            <img src="https://aadharcredit.com/website/Images/features2.svg" alt="">
+                        </div>
+                        <h4>Faster Approval</h4>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-6 no-padding-xs">
+                    <div class="card" style="border: 1px solid #fb6f92;">
+                        <div class="icon">
+                            <img src="https://aadharcredit.com/website/Images/features3.svg" alt="">
+                        </div>
+                        <h4>100% Online Process</h4>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-6 no-padding-xs">
+                    <div class="card" style="border: 1px solid #fb6f92;">
+                        <div class="icon">
+                            <img src="https://aadharcredit.com/website/Images/features4.svg" alt="">
+                        </div>
+                        <h4>Loan up to Rs 25 Lacs</h4>
+                    </div>
+                </div>
+                
+
+                
+            </div>
+        </div>
+    </section>
+    <!-- End Features Section -->
+    
+    <!-- Review Section -->
+    <section class="review">
+        <div class="container">
+            <h3 class="heading">What our Customers are saying</h3>
+
+            <div class="owl-carousel owl-theme review-carousel">
+                <div class="item">
+                    <div class="card">
+                        <div class="rating">
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                        </div>
+                        <p>
+                            <i class='bx bxs-quote-alt-left'></i>I applied for this loan yesterday afternoon. Today morning at 10:00 AM received my loan amount. 
+                            So Fast process and Good quality.<i
+                                class='bx bxs-quote-alt-right'></i>
+                        </p>
+                        <h4 class="reviewer-name">Jyoti Rastogi</h4>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="card">
+                        <div class="rating">
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                        </div>
+                        <p>
+                            <i class='bx bxs-quote-alt-left'></i>I am extremely happy with the service and quick money transfer.<i class='bx bxs-quote-alt-right'></i>
+                        </p>
+                        <h4 class="reviewer-name">Mohit Jain</h4>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="card">
+                        <div class="rating">
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                            <i class='bx bxs-star'></i>
+                        </div>
+                        <p>
+                            <i class='bx bxs-quote-alt-left'></i> Thanks to Aadhar Credit loan, I achieved financial freedom to kickstart my business venture. 
+                            Their unparalleled professionalism and unwavering support were instrumental in realizing my entrepreneurial dreams. Highly recommended!<i
+                                class='bx bxs-quote-alt-right'></i>
+                        </p>
+                        <h4 class="reviewer-name">Shariq Ibrahim</h4>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    <!-- Review Section End -->
+
+
+    <style>
+        .form-control {
+            height: 35px;
+            color: #000 !important;
+            font-size: 16px;
+            font-family: sans-serif;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        #myModalHorizontal .modal-body {
+            padding: 0px 25px 15px !important;
+        }
+
+        .modal-header {
+            padding: 9px 27px;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+        }
+
+        .d-b {
+            position: absolute;
+            position: fixed;
+            left: 20px;
+            bottom: 20px;
+            z-index: 99;
+        }
+
+        .d-b img {
+            width: 55px;
+        }
+
+        .control-label {
+            color: #059a87;
+            margin-bottom: 0;
+        }
+
+        .modal-body .btn-success {
+            background: #083342;
+            color: #fff;
+            border-radius: 8px;
+            margin-top: 5px;
+            padding: 11px 44px;
+            width: 100%;
+        }
+
+        .form-content {
+            text-align: center;
+        }
+
+        .form-content a {
+            color: #7a7a7a;
+            font-weight: bold;
+        }
+    </style>
+
+    <style>
+        #cpatchaTextBox {
+            padding: 12px 20px;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+            box-sizing: border-box;
+            height: 35px;
+        }
+
+        .form-group button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 5px 13px;
+            text-decoration: none;
+            margin: 0px;
+            cursor: pointer;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            width: 100%;
+        }
+
+        canvas {
+            /*prevent interaction with the canvas*/
+            pointer-events: none;
+            width: 65px;
+        }
+
+        .footer-contact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+        }
+
+        .mob-whatsapp-btn,
+        .mob-call-btn {
+            font-family: "Inter", sans-serif !important;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            font-weight: 700;
+            margin-left: 10px;
+            color: #fff;
+            text-decoration: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
+        }
+
+        .mob-whatsapp-btn {
+            background-color: #0dc169;
+            padding: 7px 15px;
+            border-radius: 0 25px 25px 25px;
+        }
+
+        .mob-call-btn {
+            background: linear-gradient(45deg, #46aba6, #1d5454, #53c3bf);
+            padding: 10px 28px;
+            border-radius: 25px 0px 25px 25px;
+        }
+
+        .mob-call-btn i {
+            font-size: 18px;
+        }
+
+        #exampleModalLong {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none;
+        }
+
+        #exampleModalLong .modal-dialog {
+            height: 100vh;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media screen and (max-width:576px) {
+            footer .footerFlex .map iframe {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <footer style="margin-top: 35px;">
+        <div class="col-xs-12 text-center inner-footer" style="background: #083342; margin-top: -35px; margin-bottom: 34px; padding: 34px 8px;">
+            <p style="font-size: 12px !important; line-height: 15px;padding: 5px;">Starting interest rate varies on factors like credit history, obligation, or lender. Subject to the necessary KYC and Income Verification. T&C apply.</p>
+            <p style="font-size: 12px !important; line-height: 15px;padding: 5px;">Annual Percentage Rate offered to the customer during the period of 02nd Oct 2022 To 31st Mar 2023.</p>
+            <p style="font-size: 12px !important; line-height: 15px;padding: 5px;">Min APR - 5.99%. Max APR - 11%. Repayment schedule: Min - 12 months & Max - 240 Months.^T&C apply</p>
+            <p style="font-size: 12px !important; line-height: 15px;padding: 5px;">Example: On a personal loan of Rs. 1 lakh at rate of 8% per annum, for a tenure of 24 months, the EMI amount will be Rs.4,523</p>
+        </div>
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-lg-4 col-xs-6">
+                    <h3>Quick Link</h3>
+                    <ul class="list-unstyled footerlist">
+                        <li><a href="/"><i class="fa fa-angle-double-right"></i>Home</a></li>
+                        <li><a href="/apply.html"><i class="fa fa-angle-double-right"></i>Apply Now</a></li>
+                        <li><a href="/about-us.html"><i class="fa fa-angle-double-right"></i>About Us</a></li>
+                        <li><a href="/contact-us.html"><i class="fa fa-angle-double-right"></i>Contact Us</a></li>
+                        <li><a href="/emi-calculator.html"><i class="fa fa-angle-double-right"></i>Loan Emi Calculator</a></li>
+                        <li><a href="/fees-and-charges.html"><i class="fa fa-angle-double-right"></i>Fees And Charges</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-sm-4 col-lg-4 col-xs-6">
+                    <h3>Other Links</h3>
+                    <div class="footerFlex">
+                        <ul class="list-unstyled footerlist">
+                            <li><a href="/faq.html"><i class="fa fa-angle-double-right"></i>FAQ</a></li>
+                            <li><a href="/documentation.html"><i class="fa fa-angle-double-right"></i>Documents Required</a></li>
+                            <li><a href="/privacy-policy.html"><i class="fa fa-angle-double-right"></i>Privacy Policy</a></li>
+                            <li><a href="/terms-and-conditions.html"><i class="fa fa-angle-double-right"></i>Terms & Conditions</a></li>
+                            <li><a href="/terms-and-use.html"><i class="fa fa-angle-double-right"></i>Terms of Use</a></li>
+                            <li><a href="/refund-policy.html"><i class="fa fa-angle-double-right"></i>Refund Policy</a></li>
+                            
+                            <!-- <li><a href="/"><i class="fa fa-angle-double-right"></i>Perform</a></li>-->
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4 col-lg-4 col-xs-12">
+                    <h3>Support</h3>
+                    <ul class="list-unstyled footerlist">
+                        <li><a href="mailto: quickloanapply111@gmail.com"> quickloanapply111@gmail.com</a></li>
+                        
+                        <li>
+                            573, 3rd Floor, Main Road Chirag, Delhi, New Delhi - 110017 
+                        </li>
+                    </ul>
+                    <!--<ul class="list-inline social">
+                        <li><a href="https://www.facebook.com/" target="_blank"><i class="fa fa-facebook"
+                                    aria-hidden="true"></i></a></li>
+                        <li>
+                            <a href="https://x.com/" target="_blank">
+                                <i class="fa fa-twitter" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>-->
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    
+    <footer style="margin-top: 2px; background: #083342;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+                    <h4 style=" color: #fff; ">Grievance Redressal</h4>
+            <p style="line-height: 20px; font-size: 14px !important;" >At Aadhar Credit, we strictly adhere to RBI directives and have established a robust Grievance Redressal Cell to address all concerns promptly. We are committed to responsible lending, ensuring that our loan offerings are convenient to repay. Our recovery methods are ethical, and we never resort to coercive tactics.If you have any complaints, we take them seriously and strive to resolve all issues within 5 working days.</p>
+            
+            
+            
+            <p style="line-height: 20px; font-size: 14px !important;" >We are proudly registered as Aadhar Financial Services Ltd., a Non-Banking Financial Company (NBFC) recognized and approved by the Reserve Bank of India (RBI). Our Corporate Identity Number (CIN): U65100DL1995PLC067629.</p>
+            
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <footer style="margin-top: 2px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12">
+                    <p style="line-height: 20px; font-size: 14px !important;" >Copyright © aadharcredit 2025. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!---------fixed Contect------------>
+
+
+   
+    <!-- Rquest a call modal -->
+
+
+</body>
+
+
+
+<script src="https://aadharcredit.com/website/js/jquery-2.2.0.min.js" type="text/javascript"></script>
+<script src="https://aadharcredit.com/website/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="https://aadharcredit.com/website/js/all-pagescript.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function() {
+        var modalShown = false;
+
+        // Set a delay time (e.g., 3000 milliseconds = 3 seconds)
+        var delayTime = 1000;
+
+        // Use setTimeout to delay the modal display after the page loads
+        setTimeout(function() {
+            if (!modalShown) {
+                $('#exampleModalLong').modal('show');
+                modalShown = true; // Set flag to true to indicate modal has been shown
+            }
+        }, delayTime);
+
+        // If you want the modal to hide when scrolling back up before it's shown
+        $(window).scroll(function() {
+            var scrollDistance = $(window).scrollTop();
+            var scrollTrigger = 1200;
+
+            if (scrollDistance < scrollTrigger && modalShown) {
+                $('#exampleModalLong').modal('hide');
+                modalShown = false; // Reset flag when scroll distance is less than trigger point
+            }
+        });
+    });
+</script>
+
+<script>
+    $("#exampleModalLong").modal({
+        backdrop: "static",
+        keyboard: false,
+    });
+
+    $("#banner-btn").click(function() {
+        $("#exampleModalLong").modal('hide');
+    });
+</script>
+
+
+
+
+
+
+
+
+<script>
+// Function to fetch District and State based on Pincode
+function getDistrictAndState(pincode) {
+    // Check if the pincode is a valid 6-digit number
+    if (pincode.length === 6 && !isNaN(pincode)) { 
+        fetch(`https://api.postalpincode.in/pincode/${pincode}`)
+            .then(response => response.json()) // Parse the JSON response
+            .then(data => {
+                if (data[0].Status === "Success") {
+                    // Successfully found data, extract and display district and state
+                    const district = data[0].PostOffice[0].District;
+                    const state = data[0].PostOffice[0].State;
+                    document.getElementById('txtdistrict').value = district;
+                    document.getElementById('txtstate').value = state;
+                } else {
+                    // Handle the case where the pincode is not found or invalid
+                    document.getElementById('txtdistrict').value = 'Not found';
+                    document.getElementById('txtstate').value = 'Not found';
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching data:", error);
+                document.getElementById('txtdistrict').value = 'Error';
+                document.getElementById('txtstate').value = 'Error';
+            });
+    } else {
+        // Reset fields if the pincode is not 6 digits or invalid
+        document.getElementById('txtdistrict').value = '';
+        document.getElementById('txtstate').value = '';
+    }
+}
+</script>
+
+
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    // Select elements for loan amount, loan tenure, EMI, and interest rate
+    const loanAmountInput = document.getElementById('txtloan_amount');
+    const loanTenureInput = document.getElementById('txtloan_tanure');
+    const emiInput = document.getElementById('txtloan_emi');
+    const interestRateInput = document.getElementById('txtloan_intrest'); // This will show Total Interest
+
+    // Interest rate (fixed at 8%)
+    const interestRate = 5.99 / 100;  // Convert percentage to decimal
+
+    // Function to calculate EMI and Total Interest
+    function calculateEMI() {
+        const loanAmount = parseFloat(loanAmountInput.value);
+        const loanTenure = parseInt(loanTenureInput.value);
+
+        if (loanAmount && loanTenure) {
+            const rateOfInterest = interestRate / 12;  // Monthly interest rate
+            const tenureInMonths = loanTenure;  // Loan tenure in months
+
+            // EMI formula: EMI = P * r * (1 + r)^n / ((1 + r)^n - 1)
+            // Where:
+            // P = loan amount
+            // r = monthly interest rate
+            // n = number of months
+
+            const emi = (loanAmount * rateOfInterest * Math.pow(1 + rateOfInterest, tenureInMonths)) / (Math.pow(1 + rateOfInterest, tenureInMonths) - 1);
+            const totalInterest = (emi * tenureInMonths) - loanAmount;  // Total interest
+
+            // Update the EMI input field
+            emiInput.value = emi.toFixed(2);  // Round to 2 decimal places
+
+            // Update the Total Interest field with the total interest calculated
+            interestRateInput.value = totalInterest.toFixed(2);  // Total interest
+        }
+    }
+
+    // Add event listeners to inputs
+    loanAmountInput.addEventListener('input', calculateEMI);
+    loanTenureInput.addEventListener('change', calculateEMI);
+});
+
+
+</script>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ifscInput = document.getElementById('txtbank_ifsc');
+    const bankNameInput = document.getElementById('txtbank_name');
+    const bankAddressInput = document.getElementById('txtbank_address');
+
+    // Function to call the IFSC API
+    function fetchBankDetails(ifscCode) {
+        const url = `https://ifsc.razorpay.com/${ifscCode}`; // Example API URL
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.BANK) {
+                    bankNameInput.value = data.BANK;
+                    bankAddressInput.value = data.ADDRESS || 'Address not available';
+                } else {
+                    bankNameInput.value = '';
+                    bankAddressInput.value = '';
+                    alert('Bank details not found for this IFSC Code.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching bank details:', error);
+                alert('Failed to fetch bank details.');
+            });
+    }
+
+    // Event listener for IFSC Code input
+    ifscInput.addEventListener('input', function() {
+        const ifscCode = ifscInput.value.trim();
+
+        if (ifscCode.length === 11) { // IFSC code is 11 characters long
+            fetchBankDetails(ifscCode);
+        } else {
+            bankNameInput.value = '';
+            bankAddressInput.value = '';
+        }
+    });
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+    <script src="https://aadharcredit.com/website/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+   
+    <script>
+        $('.self').owlCarousel({
+            loop: true,
+            margin: 28, // Adjust margin here, no need for px
+            autoplay: true,
+            autoplayTimeout: 4000,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 1
+                },
+                1000: {
+                    items: 4 // Ensure 4 items for wider screens
+                }
+            }
+        });
+        $('.review-carousel').owlCarousel({
+            loop: true,
+            margin: 28, // Adjust margin here, no need for px
+            autoplay: true,
+            autoplayTimeout: 4000,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                600: {
+                    items: 1
+                },
+                1000: {
+                    items: 3 // Ensure 4 items for wider screens
+                }
+            }
+        });
+        $('.authorize-carousel').owlCarousel({
+            loop: true,
+            margin: 28, // Adjust margin here, no need for px
+            autoplay: true,
+            autoplayTimeout: 4000,
+            responsive: {
+                0: {
+                    items: 2
+                },
+                600: {
+                    items: 2
+                },
+                1000: {
+                    items: 7 // Ensure 4 items for wider screens
+                }
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById("exampleModalCenter");
+            var videoFrame = document.getElementById("videoFrame");
+
+            // On item click, open modal with the video
+            document.querySelectorAll('.item').forEach(function(item) {
+                item.addEventListener('click', function() {
+                    var videoSrc = this.querySelector('.video-popup').getAttribute('data-video');
+                    videoFrame.src = videoSrc;
+                });
+            });
+        });
+    </script>
+
+
+</html>
